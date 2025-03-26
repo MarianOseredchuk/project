@@ -1,14 +1,11 @@
 #include "price.h"
 #include <fstream>
 #include <iostream>
+#include <string>
 
 void add(Price& a, const Price& b) {
     a.hryvnias += b.hryvnias;
     a.kopiykas += b.kopiykas;
-    if (a.kopiykas >= 100) {
-        a.hryvnias += a.kopiykas / 100;
-        a.kopiykas %= 100;
-    }
 }
 
 void multiply(Price& a, int quantity) {
@@ -26,34 +23,34 @@ void roundTo10(Price& a) {
 }
 
 void print(const Price& price) {
-    cout << price.hryvnias << " грн " << price.kopiykas << " коп";
+    std::cout << price.hryvnias << " грн " << price.kopiykas << " коп";
 }
 
-void processPrices(const string& filename) {
-    ifstream file(filename);
+void processPrices(const std::string& filename) {
+    std::ifstream file(filename);
     if (!file) {
-        cerr << "Помилка відкриття файлу!" << endl;
+        std::cerr << "Помилка відкриття файлу!" << std::endl;
         return;
     }
 
-    Price total(0, 0);
-    int hryvnias, quantity;
-    short kopiykas;
+    Price total{0, 0};
+    Price item{0, 0};
+    int quantity;
 
-    while (file >> hryvnias >> kopiykas >> quantity) {
-        Price item(hryvnias, kopiykas);
-        multiply(item, quantity);
-        add(total, item);
+    while (file >> item.hryvnias >> item.kopiykas >> quantity) {
+        multiply(item, quantity); // змінюємо item
+        add(total, item); // додаємо до total
     }
 
     file.close();
 
-    cout << "Загальна сума: ";
+    std::cout << "Загальна сума: ";
     print(total);
-    cout << endl;
+    std::cout << std::endl;
 
     roundTo10(total);
-    cout << "Сума до оплати: ";
+    std::cout << "Сума до оплати: ";
     print(total);
-    cout << endl;
+    std::cout << std::endl;
 }
+

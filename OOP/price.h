@@ -7,8 +7,6 @@ using namespace std;
 struct Price {
     int hryvnias;
     short kopiykas;
-
-    Price(int a = 0, short b = 0); 
 };
 
 void add(Price& a, const Price& b);
